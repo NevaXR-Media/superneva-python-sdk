@@ -347,7 +347,11 @@ def generate_code(roots: List[Node], schema_types: List[Dict[str, Any]]) -> str:
     excluded = {"str", "int", "bool", "date", "Any", "None", ""}
     unique_imports = sorted(x for x in import_types if x not in excluded)
     if unique_imports:
-        block = "from Types import (\n    " + ",\n    ".join(unique_imports) + "\n)\n"
+        block = (
+            "from SuperNeva.Types import (\n    "
+            + ",\n    ".join(unique_imports)
+            + "\n)\n"
+        )
         lines.insert(0, block)
 
     return "\n".join(lines)

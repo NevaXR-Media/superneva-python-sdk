@@ -5,7 +5,7 @@ from typing import Any, Dict
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 SCHEMA_FILE = os.path.join(BASE_DIR, "graphql.schema.json")
-OUTPUT_FILE = os.path.join(BASE_DIR, "AIRunner/SuperNevaTypes.py")
+OUTPUT_FILE = os.path.join(BASE_DIR, "SuperNeva/Types.py")
 
 print(OUTPUT_FILE)
 print(SCHEMA_FILE)

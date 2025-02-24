@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="AIRunner",
-    version="0.1.8",
+    name="SuperNeva",
+    version="0.1.0",
     packages=find_packages(),
     install_requires=[
         "boto3",
@@ -11,10 +11,10 @@ setup(
         "requests",
     ],
     python_requires=">=3.11",
-    description="AI Runner Library",
+    description="SuperNeva Python SDK",
     author="Berkay Sargın",
     author_email="berkay@nevaxr.com",
-    url="https://github.com/nevaxr/ai-runner",
+    url="https://github.com/nevaxr/superneva-python-sdk",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.11",

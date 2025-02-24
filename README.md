@@ -1,19 +1,19 @@
-# AI Runner
+# SuperNeva Python Client
 
-A Python library for running AI pipelines with AWS SQS integration.
+A Python library for interacting with SuperNeva.
 
 ## Installation
 
 ```bash
-pip install ai-runner
+pip install superneva
 ```
 
 ## Usage
 
 ```python
-from ai_runner import AIRunner
+from superneva import SuperNeva
 
-runner = AIRunner(
+runner = SuperNeva(
     ...
 )
 ```

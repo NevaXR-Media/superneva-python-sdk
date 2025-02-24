@@ -1,12 +1,21 @@
-from typing import Any, List, Optional
-from typing_extensions import TypedDict
+from typing import Any, Optional, TypedDict
 import requests
 import boto3  # type: ignore
-from AIRunner.AIRunnerConfig import AIRunnerConfig
-from AIRunner.AIRunnerLogger import AIRunnerLogger
-from AIRunner.SuperNevaTypes import File
-from AIRunner.SuperNevaTypes import LogInput
-from AIRunner.SuperNevaTypes import MetaInput
+from SuperNeva.SNLogger import SNLogger
+from SuperNeva.SuperNevaAPI import (
+    SNInfo,
+    SNInterests,
+    SNLogs,
+    SNMetas,
+    SNPrompts,
+    SNReactions,
+    SNTargets,
+    SNFiles,
+    SNCollections,
+    SNContents,
+    SNAccounts,
+    SNAuth,
+)
 
 
 class Auth(TypedDict, total=False):
@@ -15,10 +24,23 @@ class Auth(TypedDict, total=False):
     provider: Optional[str]
 
 
+class SQSConfig:
+    region: str
+    secret: str
+    key: str
+    url: str
+
+
+class SNConfig:
+    base_url: str
+    public: str
+    sqs_config: SQSConfig
+
+
 class SNRequest:
-    def __init__(self, config: AIRunnerConfig) -> None:
+    def __init__(self, config: SNConfig) -> None:
         self.config = config
-        self.logger = AIRunnerLogger(name="SNRequest", colorize=False)
+        self.logger = SNLogger(name="SNRequest", colorize=False)
         self.base_url = config.base_url
         self.public = config.public
 
@@ -58,50 +80,15 @@ class SNRequest:
             }
 
 
-class Logs(SNRequest):
-    def create(self, data: LogInput) -> Any:
-        data_array = [data]
-        return self.request("/logs/create", {"data": data_array})
-
-
-class Metas(SNRequest):
-    def create(self, data: List[MetaInput], account_id: str) -> Any:
-        return self.request(
-            "/metas/create", {"data": data}, Auth(account_id=account_id)
-        )
-
-    def get(self, metaId: str, account_id: str) -> Any:
-        return self.request(f"/metas/{metaId}", {}, Auth(account_id=account_id))
-
-
-class Files(SNRequest):
-    def upload(
-        self,
-        content_type: str,
-        data: Any,
-        account_id: str,
-        path: Optional[str] = None,
-        key: Optional[str] = None,
-    ) -> Any:
-
-        fileData = self.request(
-            "/files/upload",
-            {"key": key, "contentType": content_type, "data": data, "path": path},
-            Auth(account_id=account_id),
-        )
-        # cast data["data"]["upload"] to File
-        return File(**fileData)
-
-
 class SNSQS:
-    def __init__(self, config: AIRunnerConfig) -> None:
+    def __init__(self, config: SNConfig) -> None:
         self.config = config
-        self.logger = AIRunnerLogger(name="SuperNeva", colorize=False)
+        self.logger = SNLogger(name="SuperNeva", colorize=False)
 
-        self.region_name = config.superneva_sqs_config.region
-        self.aws_secret_access_key = config.superneva_sqs_config.secret
-        self.aws_access_key_id = config.superneva_sqs_config.key
-        self.url = config.superneva_sqs_config.url
+        self.region_name = config.sqs_config.region
+        self.aws_secret_access_key = config.sqs_config.secret
+        self.aws_access_key_id = config.sqs_config.key
+        self.url = config.sqs_config.url
 
         self.sqs = boto3.client(  # type: ignore
             "sqs",
@@ -124,17 +111,17 @@ class SNSQS:
 
 
 class SuperNeva:
-    def __init__(self, config: AIRunnerConfig) -> None:
+    def __init__(self, config: SNConfig) -> None:
         self.config = config
-        self.logger = AIRunnerLogger(name="SuperNeva", colorize=False)
+        self.logger = SNLogger(name="SuperNeva", colorize=False)
 
         self.isSuperNevaReady = config.base_url != ""
-        self.isConsumerReady = config.consumer_sqs_config.key != ""
-        self.isResponseQueueReady = config.superneva_sqs_config.key != ""
+        self.isConsumerReady = config.sqs_config.key != ""
+        self.isResponseQueueReady = config.sqs_config.key != ""
 
-        self.region_name = config.superneva_sqs_config.region
-        self.aws_secret_access_key = config.superneva_sqs_config.secret
-        self.aws_access_key_id = config.superneva_sqs_config.key
+        self.region_name = config.sqs_config.region
+        self.aws_secret_access_key = config.sqs_config.secret
+        self.aws_access_key_id = config.sqs_config.key
 
         self.sqs = boto3.client(  # type: ignore
             "sqs",
@@ -146,8 +133,15 @@ class SuperNeva:
         self.base_url = config.base_url
         self.public = config.public
 
-        self.logs = Logs(config)
-        # self.metas = Metas(config)
-        self.files = Files(config)
-        self.metas = Metas(config)
-        self.queue = SNSQS(config)
+        self.prompts = SNPrompts(config)
+        self.targets = SNTargets(config)
+        self.reactions = SNReactions(config)
+        self.metas = SNMetas(config)
+        self.logs = SNLogs(config)
+        self.interests = SNInterests(config)
+        self.info = SNInfo(config)
+        self.files = SNFiles(config)
+        self.contents = SNContents(config)
+        self.collections = SNCollections(config)
+        self.auth = SNAuth(config)
+        self.accounts = SNAccounts(config)

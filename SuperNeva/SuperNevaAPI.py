@@ -151,7 +151,7 @@ class Contents(SNRequest):
         super().__init__(*args, **kwargs)
 
     def get(self, contentId: Optional["str"], key: Optional["str"], _auth: Optional[Auth] = None) -> Content:
-        return self.request(f"/contents/{contentId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/contents/{contentId}", body={ "key": key }, _auth=_auth)  # type: ignore
 
     def list(self, _id: Optional["str"], limit: Optional["int"], skip: Optional["int"], sort: Optional[List["ContentListSortInput"]], filters: Optional["ContentListFilterInput"], _auth: Optional[Auth] = None) -> ContentList:
         return self.request("/contents", body={}, _auth=_auth)  # type: ignore

@@ -31,7 +31,8 @@
       "name": "publicTarget",
       "method": "get",
       "path": "/targets/:targetId",
-      "type": "Query"
+      "type": "Query",
+      "body": false
     }
   ],
   "Reactions": [
@@ -47,7 +48,8 @@
       "name": "publicMeta",
       "method": "get",
       "path": "/metas/:metaId",
-      "type": "Query"
+      "type": "Query",
+      "body": false
     },
     {
       "name": "createMeta",

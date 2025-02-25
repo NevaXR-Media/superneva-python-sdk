@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -33,7 +33,7 @@ def map_graphql_to_python(type_name: str) -> str:
         "Date": "date",
         "JSON": "Any",
     }
-    return mappings.get(type_name, "str")  # default fallback => "str"
+    return mappings.get(type_name, type_name or "str")  # default fallback => "str"
 
 
 # ------------------- DATA STRUCTURES -------------------
@@ -164,28 +164,70 @@ def get_graphql_field(
     return next((f for f in fields if f["name"] == gql_name), {})  # type: ignore
 
 
+def resolve_arg_import_type(argdef: Dict[str, Any]) -> Optional[str]:
+    """
+    Arg definition'ının import tipini döndürür.
+    """
+    type = argdef.get("type", {})
+    if type.get("kind") == "NON_NULL":
+        type = type.get("ofType", {})
+        if type.get("kind") == "LIST":
+            type = type.get("ofType", {})
+            if type.get("kind") == "NON_NULL":
+                type = type.get("ofType", {})
+    if type.get("kind") == "LIST":
+        type = type.get("ofType", {})
+        if type.get("kind") == "NON_NULL":
+            type = type.get("ofType", {})
+    if type.get("kind") == "SCALAR":
+        return None
+    return type.get("name", "Any")
+
+
 def map_graphql_arg_type(arg_def: Dict[str, Any]) -> str:
     """
-    Arg definition'ı (kind: NON_NULL, LIST, vb.) -> Python tipi (Optional["str"], vs.)
-    En sonda map_graphql_to_python() ile fallback "str" döndürüyoruz.
+    Maps GraphQL type definitions to Python type hints recursively.
+    Handles nested NON_NULL and LIST types.
+    Returns Python type hints like: str, Optional[str], List[str], Optional[List[str]], etc.
     """
-    kind = arg_def.get("kind", "")
-    if kind == "NON_NULL":
-        oftype = arg_def.get("ofType", {})
-        if oftype.get("kind") == "LIST":
-            el = map_graphql_to_python(oftype["ofType"]["name"])
-            return f'List["{el}"]'
+
+    def handle_type(type_def: Dict[str, Any], inside_list: bool = False) -> str:
+        if not type_def:
+            return '"Any"'
+
+        kind = type_def.get("kind")
+        name = type_def.get("name")
+        of_type = type_def.get("ofType", {})
+
+        if kind == "NON_NULL":
+            inner = handle_type(of_type, inside_list)
+            # If we're inside a list, just return the inner type without Optional
+            # If not, strip Optional if it exists
+            if inside_list:
+                return inner
+            if inner.startswith("Optional["):
+                return inner[9:-1]
+            if inner.startswith('"') and inner.endswith('"'):
+                return inner[1:-1]
+            return inner
+        elif kind == "LIST":
+            # Pass inside_list=True to handle_type for list elements
+            inner_type = handle_type(of_type, True)
+            return f"Optional[List[{inner_type}]]"
+        elif name:
+            # Only wrap in Optional if not inside a list
+            mapped_type = map_graphql_to_python(name)
+            return (
+                f'Optional["{mapped_type}"]' if not inside_list else f'"{mapped_type}"'
+            )
         else:
-            el = map_graphql_to_python(oftype.get("name", "Any"))
-            return f'"{el}"'
-    elif kind == "LIST":
-        inn = arg_def.get("ofType", {}).get("ofType", {}).get("name", "Any")
-        el = map_graphql_to_python(inn)
-        return f'Optional[List["{el}"]]'
-    else:
-        # SCALAR / OBJECT => name
-        el = map_graphql_to_python(arg_def.get("name", "Any"))
-        return f'Optional["{el}"]'
+            return '"Any"'
+
+    # Start with the top-level type
+    type_def = arg_def.get("type", {})
+    result = handle_type(type_def)
+
+    return result
 
 
 def extract_path_params(path_str: str) -> List[str]:
@@ -283,7 +325,7 @@ def generate_code(roots: List[Node], schema_types: List[Dict[str, Any]]) -> str:
             ):
                 import_types.append(ret_type)  # type: ignore
 
-            field_args = gql_field.get("args", [])
+            field_args: List[Dict[str, Any]] | Any = gql_field.get("args", [])
 
             # Path param analizi
             path_params = extract_path_params(ep.path)
@@ -299,6 +341,13 @@ def generate_code(roots: List[Node], schema_types: List[Dict[str, Any]]) -> str:
                     continue
                 pytype = map_graphql_arg_type(argdef)  # type: ignore
 
+                if argdef is not None:
+                    import_type = resolve_arg_import_type(argdef)
+                    if import_type is not None:
+                        import_types.append(import_type)
+
+                # print(pytype, arg_name)
+                # import_types.append(pytype)
                 # path param?
                 if arg_name in path_params_set:
                     # method imzasına ekle, body'ye koyma
@@ -346,6 +395,8 @@ def generate_code(roots: List[Node], schema_types: List[Dict[str, Any]]) -> str:
     # import SuperNevaTypes
     excluded = {"str", "int", "bool", "date", "Any", "None", ""}
     unique_imports = sorted(x for x in import_types if x not in excluded)
+    # remove duplicates
+    unique_imports = list(dict.fromkeys(unique_imports))
     if unique_imports:
         block = (
             "from SuperNeva.Types import (\n    "

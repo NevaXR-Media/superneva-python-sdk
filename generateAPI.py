@@ -18,6 +18,10 @@ def load_schema(file_path: str) -> Dict[str, Any]:
         return json.load(f)
 
 
+def cleanup_null_dict_values(d: Dict[str, Any]) -> Dict[str, Any]:
+    return {k: v for k, v in d.items() if v is not None}
+
+
 def map_graphql_to_python(type_name: str) -> str:
     """
     GraphQL scalar tiplerini Python tiplerine dönüştürür.
@@ -376,17 +380,17 @@ def generate_code(roots: List[Node], schema_types: List[Dict[str, Any]]) -> str:
             if ep.no_body:
                 # body = {}
                 lines.append(
-                    f"        return self.request({new_path}, body={{}}, _auth=_auth)  # type: ignore"
+                    f"        return self.request({new_path}, body={{}}, auth=_auth)"
                 )
             else:
                 if body_list:
                     body_str = ", ".join(body_list)
                     lines.append(
-                        f"        return self.request({new_path}, body={{ {body_str} }}, _auth=_auth)  # type: ignore"
+                        f"        return self.request({new_path}, body=cleanup_dict({{ {body_str} }}), auth=_auth)"
                     )
                 else:
                     lines.append(
-                        f"        return self.request({new_path}, body={{}}, _auth=_auth)  # type: ignore"
+                        f"        return self.request({new_path}, body={{}}, auth=_auth)"
                     )
 
             lines.append("")
@@ -421,11 +425,11 @@ def generate_pyi(schema: Dict[str, Any]) -> str:
     4) map_graphql_to_python(...) -> eğer tip tanınmıyorsa => "str"
     """
     header = [
-        "from enum import Enum  # type: ignore",
-        "from datetime import date  # type: ignore",
-        "from typing import TypedDict, Optional, Any, List  # type: ignore",
+        "from typing import Optional, Any, List, Dict",
         "from SuperNeva.SuperNeva import SNRequest, Auth",
         "",
+        "def cleanup_dict(d: Dict[str, Any]) -> Dict[str, Any]:",
+        "   return {k: v for k, v in d.items() if v is not None}",
     ]
     endpoint_mapping = load_schema(ENDPOINT_MAPPING_FILE)
     roots = build_tree_from_mapping(endpoint_mapping)

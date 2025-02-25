@@ -1,7 +1,10 @@
-from enum import Enum  # type: ignore
-from datetime import date  # type: ignore
-from typing import TypedDict, Optional, Any, List  # type: ignore
+from typing import Optional, Any, List, Dict
 from SuperNeva.SuperNeva import SNRequest, Auth
+
+
+def cleanup_dict(d: Dict[str, Any]) -> Dict[str, Any]:
+    return {k: v for k, v in d.items() if v is not None}
+
 
 from SuperNeva.Types import (
     Account,
@@ -74,7 +77,7 @@ class SNPrompts(SNRequest):
         super().__init__(*args, **kwargs)
 
     def get(self, promptId: "str", _auth: Optional[Auth] = None) -> Prompt:
-        return self.request(f"/prompts/{promptId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/prompts/{promptId}", body={}, auth=_auth)
 
     def list(
         self,
@@ -85,10 +88,22 @@ class SNPrompts(SNRequest):
         filters: Optional["PromptListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> PromptList:
-        return self.request("/prompts", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/prompts",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
     def run(self, _auth: Optional[Auth] = None) -> Any:
-        return self.request("/prompts/run", body={}, _auth=_auth)  # type: ignore
+        return self.request("/prompts/run", body={}, auth=_auth)
 
 
 class SNTargets(SNRequest):
@@ -104,10 +119,22 @@ class SNTargets(SNRequest):
         filters: Optional["TargetListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> TargetList:
-        return self.request("/targets", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/targets",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
     def get(self, targetId: "str", _auth: Optional[Auth] = None) -> Target:
-        return self.request(f"/targets/{targetId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/targets/{targetId}", body={}, auth=_auth)
 
 
 class SNReactions(SNRequest):
@@ -123,7 +150,19 @@ class SNReactions(SNRequest):
         filters: Optional["ReactionListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> ReactionList:
-        return self.request("/reactions", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/reactions",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
 
 class SNMetas(SNRequest):
@@ -131,10 +170,12 @@ class SNMetas(SNRequest):
         super().__init__(*args, **kwargs)
 
     def get(self, metaId: "str", _auth: Optional[Auth] = None) -> Meta:
-        return self.request(f"/metas/{metaId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/metas/{metaId}", body={}, auth=_auth)
 
     def create(self, data: List["MetaInput"], _auth: Optional[Auth] = None) -> MetaList:
-        return self.request("metas/create", body={"data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "metas/create", body=cleanup_dict({"data": data}), auth=_auth
+        )
 
     def list(
         self,
@@ -145,7 +186,19 @@ class SNMetas(SNRequest):
         filters: Optional["MetaListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> MetaList:
-        return self.request("/metas", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/metas",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
 
 class SNLogs(SNRequest):
@@ -155,7 +208,9 @@ class SNLogs(SNRequest):
     def create(
         self, data: List["LogInput"], _auth: Optional[Auth] = None
     ) -> SimpleResponse:
-        return self.request("/logs/create", body={"data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/logs/create", body=cleanup_dict({"data": data}), auth=_auth
+        )
 
 
 class SNInterests(SNRequest):
@@ -168,7 +223,11 @@ class SNInterests(SNRequest):
         cleanCache: Optional["bool"],
         _auth: Optional[Auth] = None,
     ) -> Interest:
-        return self.request("/interests/create", body={"data": data, "cleanCache": cleanCache}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/interests/create",
+            body=cleanup_dict({"data": data, "cleanCache": cleanCache}),
+            auth=_auth,
+        )
 
 
 class SNInfo(SNRequest):
@@ -182,7 +241,17 @@ class SNInfo(SNRequest):
         clientVersion: Optional["str"],
         _auth: Optional[Auth] = None,
     ) -> Info:
-        return self.request("/info", body={"locale": locale, "clientType": clientType, "clientVersion": clientVersion}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/info",
+            body=cleanup_dict(
+                {
+                    "locale": locale,
+                    "clientType": clientType,
+                    "clientVersion": clientVersion,
+                }
+            ),
+            auth=_auth,
+        )
 
 
 class SNFiles(SNRequest):
@@ -198,7 +267,19 @@ class SNFiles(SNRequest):
         key: Optional["str"],
         _auth: Optional[Auth] = None,
     ) -> File:
-        return self.request("/files/upload", body={"data": data, "contentType": contentType, "filename": filename, "path": path, "key": key}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/files/upload",
+            body=cleanup_dict(
+                {
+                    "data": data,
+                    "contentType": contentType,
+                    "filename": filename,
+                    "path": path,
+                    "key": key,
+                }
+            ),
+            auth=_auth,
+        )
 
 
 class SNContents(SNRequest):
@@ -211,7 +292,7 @@ class SNContents(SNRequest):
         key: Optional["str"],
         _auth: Optional[Auth] = None,
     ) -> Content:
-        return self.request(f"/contents/{contentId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/contents/{contentId}", body={}, auth=_auth)
 
     def list(
         self,
@@ -222,7 +303,19 @@ class SNContents(SNRequest):
         filters: Optional["ContentListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> ContentList:
-        return self.request("/contents", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/contents",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
 
 class SNCollections(SNRequest):
@@ -230,7 +323,7 @@ class SNCollections(SNRequest):
         super().__init__(*args, **kwargs)
 
     def get(self, collectionId: "str", _auth: Optional[Auth] = None) -> Collection:
-        return self.request(f"/collections/{collectionId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/collections/{collectionId}", body={}, auth=_auth)
 
     def list(
         self,
@@ -241,7 +334,19 @@ class SNCollections(SNRequest):
         filters: Optional["CollectionListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> CollectionList:
-        return self.request("/collections", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/collections",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
 
 class SNAuth(SNRequest):
@@ -249,13 +354,15 @@ class SNAuth(SNRequest):
         super().__init__(*args, **kwargs)
 
     def registerTargets(self, _auth: Optional[Auth] = None) -> SimpleResponse:
-        return self.request("/auth/register-targets", body={}, _auth=_auth)  # type: ignore
+        return self.request("/auth/register-targets", body={}, auth=_auth)
 
     def isServiceConnected(self, _auth: Optional[Auth] = None) -> Any:
-        return self.request("/auth/is-service-connected", body={}, _auth=_auth)  # type: ignore
+        return self.request("/auth/is-service-connected", body={}, auth=_auth)
 
     def loginWithToken(self, token: "str", _auth: Optional[Auth] = None) -> Session:
-        return self.request("/auth/login-with-token", body={"token": token}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/auth/login-with-token", body=cleanup_dict({"token": token}), auth=_auth
+        )
 
     def connectWithService(
         self,
@@ -265,7 +372,18 @@ class SNAuth(SNRequest):
         targetKey: Optional["str"],
         _auth: Optional[Auth] = None,
     ) -> Session:
-        return self.request("/auth/connect-with-service", body={"data": data, "service": service, "targetId": targetId, "targetKey": targetKey}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/auth/connect-with-service",
+            body=cleanup_dict(
+                {
+                    "data": data,
+                    "service": service,
+                    "targetId": targetId,
+                    "targetKey": targetKey,
+                }
+            ),
+            auth=_auth,
+        )
 
     def createAccount(
         self,
@@ -277,7 +395,20 @@ class SNAuth(SNRequest):
         targetKey: Optional["str"],
         _auth: Optional[Auth] = None,
     ) -> Session:
-        return self.request("/auth/create-account", body={"email": email, "password": password, "profile": profile, "settings": settings, "targetId": targetId, "targetKey": targetKey}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/auth/create-account",
+            body=cleanup_dict(
+                {
+                    "email": email,
+                    "password": password,
+                    "profile": profile,
+                    "settings": settings,
+                    "targetId": targetId,
+                    "targetKey": targetKey,
+                }
+            ),
+            auth=_auth,
+        )
 
 
 class SNAccounts(SNRequest):
@@ -300,7 +431,7 @@ class SNAccountsMe(SNRequest):
         self.states = SNAccountsMeStates(*args, **kwargs)
 
     def get(self, _auth: Optional[Auth] = None) -> Account:
-        return self.request("/accounts/me", body={}, _auth=_auth)  # type: ignore
+        return self.request("/accounts/me", body={}, auth=_auth)
 
 
 class SNAccountsMeCollections(SNRequest):
@@ -308,7 +439,9 @@ class SNAccountsMeCollections(SNRequest):
         super().__init__(*args, **kwargs)
 
     def get(self, collectionId: "str", _auth: Optional[Auth] = None) -> Collection:
-        return self.request(f"/accounts/me/collections/{collectionId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(
+            f"/accounts/me/collections/{collectionId}", body={}, auth=_auth
+        )
 
     def list(
         self,
@@ -319,32 +452,62 @@ class SNAccountsMeCollections(SNRequest):
         filters: Optional["CollectionListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> CollectionList:
-        return self.request("/accounts/me/collections", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/collections",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
     def create(
         self, data: "CollectionInput", _auth: Optional[Auth] = None
     ) -> Collection:
-        return self.request("/accounts/me/collections/create", body={"data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/collections/create",
+            body=cleanup_dict({"data": data}),
+            auth=_auth,
+        )
 
     def delete(
         self, collectionId: "str", _auth: Optional[Auth] = None
     ) -> SimpleResponse:
-        return self.request(f"/accounts/me/collections/delete/{collectionId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(
+            f"/accounts/me/collections/delete/{collectionId}", body={}, auth=_auth
+        )
 
     def update(
         self, collectionId: "str", data: "CollectionInput", _auth: Optional[Auth] = None
     ) -> Collection:
-        return self.request("/accounts/me/collections/update", body={"collectionId": collectionId, "data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/collections/update",
+            body=cleanup_dict({"collectionId": collectionId, "data": data}),
+            auth=_auth,
+        )
 
     def removeContentFromCollection(
         self, collectionId: "str", contentId: "str", _auth: Optional[Auth] = None
     ) -> Collection:
-        return self.request("/accounts/me/collections/remove-content-from-collection", body={"collectionId": collectionId, "contentId": contentId}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/collections/remove-content-from-collection",
+            body=cleanup_dict({"collectionId": collectionId, "contentId": contentId}),
+            auth=_auth,
+        )
 
     def addContentToCollection(
         self, collectionId: "str", contentId: "str", _auth: Optional[Auth] = None
     ) -> Collection:
-        return self.request("/api/v1/accounts/me/collections/add-content-to-collection", body={"collectionId": collectionId, "contentId": contentId}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/api/v1/accounts/me/collections/add-content-to-collection",
+            body=cleanup_dict({"collectionId": collectionId, "contentId": contentId}),
+            auth=_auth,
+        )
 
 
 class SNAccountsMeContents(SNRequest):
@@ -360,21 +523,43 @@ class SNAccountsMeContents(SNRequest):
         filters: Optional["ContentListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> ContentList:
-        return self.request("/accounts/me/contents", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/contents",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
     def create(self, data: "ContentInput", _auth: Optional[Auth] = None) -> Content:
-        return self.request("/accounts/me/contents/create", body={"data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/contents/create",
+            body=cleanup_dict({"data": data}),
+            auth=_auth,
+        )
 
     def delete(self, contentId: "str", _auth: Optional[Auth] = None) -> SimpleResponse:
-        return self.request(f"/accounts/me/contents/delete/{contentId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(
+            f"/accounts/me/contents/delete/{contentId}", body={}, auth=_auth
+        )
 
     def update(
         self, contentId: "str", data: "ContentInput", _auth: Optional[Auth] = None
     ) -> Content:
-        return self.request("/accounts/me/contents/update", body={"contentId": contentId, "data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/contents/update",
+            body=cleanup_dict({"contentId": contentId, "data": data}),
+            auth=_auth,
+        )
 
     def get(self, contentId: "str", _auth: Optional[Auth] = None) -> Content:
-        return self.request(f"/accounts/me/contents/{contentId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/accounts/me/contents/{contentId}", body={}, auth=_auth)
 
 
 class SNAccountsMeDevices(SNRequest):
@@ -390,21 +575,41 @@ class SNAccountsMeDevices(SNRequest):
         filters: Optional["DeviceListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> DeviceList:
-        return self.request("/accounts/me/devices", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/devices",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
     def save(self, data: "DeviceInput", _auth: Optional[Auth] = None) -> Device:
-        return self.request("/accounts/me/devices/save", body={"data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/devices/save", body=cleanup_dict({"data": data}), auth=_auth
+        )
 
     def update(
         self, deviceId: "str", data: "DeviceInput", _auth: Optional[Auth] = None
     ) -> Device:
-        return self.request("/accounts/me/devices/update", body={"deviceId": deviceId, "data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/devices/update",
+            body=cleanup_dict({"deviceId": deviceId, "data": data}),
+            auth=_auth,
+        )
 
     def delete(self, deviceId: "str", _auth: Optional[Auth] = None) -> SimpleResponse:
-        return self.request(f"/accounts/me/devices/delete/{deviceId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(
+            f"/accounts/me/devices/delete/{deviceId}", body={}, auth=_auth
+        )
 
     def get(self, deviceId: "str", _auth: Optional[Auth] = None) -> Device:
-        return self.request(f"/accounts/me/devices/{deviceId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/accounts/me/devices/{deviceId}", body={}, auth=_auth)
 
 
 class SNAccountsMeInterests(SNRequest):
@@ -420,10 +625,22 @@ class SNAccountsMeInterests(SNRequest):
         filters: Optional["InterestListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> InterestList:
-        return self.request("/accounts/me/interests", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/interests",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
     def get(self, interestId: "str", _auth: Optional[Auth] = None) -> Interest:
-        return self.request(f"/accounts/me/interests/{interestId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/accounts/me/interests/{interestId}", body={}, auth=_auth)
 
     def create(
         self,
@@ -431,10 +648,16 @@ class SNAccountsMeInterests(SNRequest):
         cleanCache: Optional["bool"],
         _auth: Optional[Auth] = None,
     ) -> Interest:
-        return self.request("/accounts/me/interests/create", body={"data": data, "cleanCache": cleanCache}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/interests/create",
+            body=cleanup_dict({"data": data, "cleanCache": cleanCache}),
+            auth=_auth,
+        )
 
     def delete(self, interestId: "str", _auth: Optional[Auth] = None) -> SimpleResponse:
-        return self.request(f"/accounts/me/interests/delete/{interestId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(
+            f"/accounts/me/interests/delete/{interestId}", body={}, auth=_auth
+        )
 
 
 class SNAccountsMeLocations(SNRequest):
@@ -450,15 +673,35 @@ class SNAccountsMeLocations(SNRequest):
         filters: Optional["LocationListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> LocationList:
-        return self.request("/accounts/me/locations", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/locations",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
     def register(self, data: "LocationInput", _auth: Optional[Auth] = None) -> Location:
-        return self.request("/accounts/me/locations/register", body={"data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/locations/register",
+            body=cleanup_dict({"data": data}),
+            auth=_auth,
+        )
 
     def deleteAll(
         self, deviceId: "str", _auth: Optional[Auth] = None
     ) -> SimpleResponse:
-        return self.request("/accounts/me/locations/delete-all", body={"deviceId": deviceId}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/locations/delete-all",
+            body=cleanup_dict({"deviceId": deviceId}),
+            auth=_auth,
+        )
 
 
 class SNAccountsMeLogs(SNRequest):
@@ -474,12 +717,26 @@ class SNAccountsMeLogs(SNRequest):
         filters: Optional["LogListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> LogList:
-        return self.request("/accounts/me/logs", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/logs",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
     def create(
         self, data: List["LogInput"], _auth: Optional[Auth] = None
     ) -> SimpleResponse:
-        return self.request("/accounts/me/logs/create", body={"data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/logs/create", body=cleanup_dict({"data": data}), auth=_auth
+        )
 
 
 class SNAccountsMePrompts(SNRequest):
@@ -495,21 +752,41 @@ class SNAccountsMePrompts(SNRequest):
         filters: Optional["PromptListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> PromptList:
-        return self.request("/accounts/me/prompts", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/prompts",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
     def get(self, promptId: "str", _auth: Optional[Auth] = None) -> Prompt:
-        return self.request(f"/accounts/me/prompts/{promptId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/accounts/me/prompts/{promptId}", body={}, auth=_auth)
 
     def create(self, data: "PromptInput", _auth: Optional[Auth] = None) -> Prompt:
-        return self.request("/accounts/me/prompts/create", body={"data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/prompts/create", body=cleanup_dict({"data": data}), auth=_auth
+        )
 
     def update(
         self, promptId: "str", data: "PromptInput", _auth: Optional[Auth] = None
     ) -> Prompt:
-        return self.request("/accounts/me/prompts/update", body={"promptId": promptId, "data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/prompts/update",
+            body=cleanup_dict({"promptId": promptId, "data": data}),
+            auth=_auth,
+        )
 
     def delete(self, promptId: "str", _auth: Optional[Auth] = None) -> SimpleResponse:
-        return self.request(f"/accounts/me/prompts/delete/{promptId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(
+            f"/accounts/me/prompts/delete/{promptId}", body={}, auth=_auth
+        )
 
 
 class SNAccountsMeReactions(SNRequest):
@@ -522,7 +799,11 @@ class SNAccountsMeReactions(SNRequest):
         skipNotification: Optional["bool"],
         _auth: Optional[Auth] = None,
     ) -> Reaction:
-        return self.request("/accounts/me/reactions/save", body={"data": data, "skipNotification": skipNotification}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/reactions/save",
+            body=cleanup_dict({"data": data, "skipNotification": skipNotification}),
+            auth=_auth,
+        )
 
 
 class SNAccountsMeStates(SNRequest):
@@ -538,10 +819,24 @@ class SNAccountsMeStates(SNRequest):
         filters: Optional["StateListFilterInput"],
         _auth: Optional[Auth] = None,
     ) -> StateList:
-        return self.request("/accounts/me/states", body={"_id": _id, "limit": limit, "skip": skip, "sort": sort, "filters": filters}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/states",
+            body=cleanup_dict(
+                {
+                    "_id": _id,
+                    "limit": limit,
+                    "skip": skip,
+                    "sort": sort,
+                    "filters": filters,
+                }
+            ),
+            auth=_auth,
+        )
 
     def get(self, stateId: Optional["str"], _auth: Optional[Auth] = None) -> State:
-        return self.request(f"/accounts/me/states/{stateId}", body={}, _auth=_auth)  # type: ignore
+        return self.request(f"/accounts/me/states/{stateId}", body={}, auth=_auth)
 
     def save(self, data: "StateInput", _auth: Optional[Auth] = None) -> State:
-        return self.request("/accounts/me/states/save", body={"data": data}, _auth=_auth)  # type: ignore
+        return self.request(
+            "/accounts/me/states/save", body=cleanup_dict({"data": data}), auth=_auth
+        )

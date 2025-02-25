@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="SuperNeva",
-    version="0.1.4",
+    version="0.1.5",
     packages=find_packages(),
     install_requires=[
         "boto3",
@@ -25,10 +25,7 @@ setup(
         "Typing :: Typed",
     ],
     package_data={
-        "AIRunner": ["py.typed", "**/*.py"],
-        "AIRunner.AIRunner": ["py.typed", "**/*.py"],
-        "AIRunner.SuperNeva": ["py.typed", "**/*.py"],
-        "AIRunner.Types": ["py.typed", "**/*.py"],
+        "SuperNeva": ["py.typed", "**/*.py"],
     },
     include_package_data=True,
 )

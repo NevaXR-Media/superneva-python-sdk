@@ -426,7 +426,7 @@ def generate_pyi(schema: Dict[str, Any]) -> str:
     """
     header = [
         "from typing import Optional, Any, List, Dict",
-        "from SuperNeva.SuperNeva import SNRequest, Auth",
+        "from SuperNeva.SNRequest import SNRequest, Auth",
         "",
         "def cleanup_dict(d: Dict[str, Any]) -> Dict[str, Any]:",
         "   return {k: v for k, v in d.items() if v is not None}",

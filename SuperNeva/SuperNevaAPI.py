@@ -1,5 +1,5 @@
 from typing import Optional, Any, List, Dict
-from SuperNeva.SuperNeva import SNRequest, Auth
+from SuperNeva.SNRequest import SNRequest, Auth
 
 
 def cleanup_dict(d: Dict[str, Any]) -> Dict[str, Any]:

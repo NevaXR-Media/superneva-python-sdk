@@ -28,7 +28,7 @@ class SuperNeva:
         self.isSuperNevaReady = config["base_url"] != ""
         self.isResponseQueueReady = config["sqs_config"] is not None
 
-        self.queue = SNSQS(config)
+        self.queue = SNSQS(config["sqs_config"])
         self.prompts = SNPrompts(config)
         self.targets = SNTargets(config)
         self.reactions = SNReactions(config)

@@ -1,6 +1,5 @@
-from typing import Any, TypedDict
+from typing import Any, TypedDict, Optional
 
-from SuperNeva.SNConfig import SNConfig
 from SuperNeva.SNLogger import SNLogger
 
 import boto3  # type: ignore
@@ -14,21 +13,19 @@ class SNSQSConfig(TypedDict):
 
 
 class SNSQS:
-    def __init__(self, config: SNConfig) -> None:
+    def __init__(self, config: Optional[SNSQSConfig] = None) -> None:
         self.config = config
         self.logger = SNLogger(name="SuperNeva", colorize=False)
-        self.base_url = config["base_url"]
-        self.public = config["public"]
         self.sqs: Any = None
 
-        if config["sqs_config"] is None:
+        if config is None:
             self.logger.warning("SQS is not set")
 
         else:
-            self.region_name = config["sqs_config"]["region"]
-            self.aws_secret_access_key = config["sqs_config"]["secret"]
-            self.aws_access_key_id = config["sqs_config"]["key"]
-            self.url = config["sqs_config"]["url"]
+            self.region_name = config["region"]
+            self.aws_secret_access_key = config["secret"]
+            self.aws_access_key_id = config["key"]
+            self.url = config["url"]
 
             self.sqs = boto3.client(  # type: ignore
                 "sqs",

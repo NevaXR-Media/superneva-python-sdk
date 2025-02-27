@@ -25,6 +25,7 @@ class SNRequest:
         body: Any,
         auth: Optional[Auth] = None,
     ) -> Any:
+        print("NEW REQUEST", self.base_url + path, auth)
         if auth is None:
             headers = {
                 "content-type": "application/json",
@@ -34,12 +35,17 @@ class SNRequest:
             headers = {
                 "content-type": "application/json",
                 "x-public-key": self.public,
-                "x-impersonate": (
-                    auth.get("token")
-                    if f"{auth.get('provider')}:::{auth.get('account_id')}:::{auth.get('token')}"
-                    else f"{auth.get('provider')}:::{auth.get('account_id')}"
-                ),
             }
+
+            if auth.get("token"):
+                headers["x-impersonate"] = (
+                    f"{auth.get('provider','neva')}:::{auth.get('account_id')}:::{auth.get('token')}"
+                )
+            else:
+                headers["x-impersonate"] = (
+                    f"{auth.get('provider','neva')}:::{auth.get('account_id')}"
+                )
+
         try:
             response = requests.post(self.base_url + path, headers=headers, json=body)
             return response.json()

@@ -3067,7 +3067,7 @@ class MetaInput(TypedDict, total=False):
     picture: Optional["MLFileInput"]
     location: Optional["GeoLocationInput"]
     tags: Optional["None"]
-    targets: Optional["None"]
+    targets: Optional[Any]
     published: Optional["bool"]
     resources: Optional["None"]
     variants: Optional["None"]

@@ -54,7 +54,7 @@
     {
       "name": "createMeta",
       "method": "create",
-      "path": "metas/create",
+      "path": "/metas/create",
       "type": "Mutation"
     },
     {

@@ -174,7 +174,7 @@ class SNMetas(SNRequest):
 
     def create(self, data: List["MetaInput"], _auth: Optional[Auth] = None) -> MetaList:
         return self.request(
-            "metas/create", body=cleanup_dict({"data": data}), auth=_auth
+            "/metas/create", body=cleanup_dict({"data": data}), auth=_auth
         )
 
     def list(

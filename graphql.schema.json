@@ -11164,16 +11164,6 @@
               "description": "Connect with service, scope: public",
               "args": [
                 {
-                  "name": "data",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "JSON",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
                   "name": "service",
                   "description": null,
                   "type": {
@@ -11184,6 +11174,16 @@
                       "name": "ServiceInput",
                       "ofType": null
                     }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "data",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "JSON",
+                    "ofType": null
                   },
                   "defaultValue": null
                 },

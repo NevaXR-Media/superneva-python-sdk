@@ -2,13 +2,16 @@
   "data": {
     "__schema": {
       "queryType": {
-        "name": "Query"
+        "name": "Query",
+        "kind": "OBJECT"
       },
       "mutationType": {
-        "name": "Mutation"
+        "name": "Mutation",
+        "kind": "OBJECT"
       },
       "subscriptionType": {
-        "name": "Subscription"
+        "name": "Subscription",
+        "kind": "OBJECT"
       },
       "types": [
         {
@@ -10118,24 +10121,6 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "roles",
-                  "description": null,
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "SuperRole",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
                   "name": "features",
                   "description": null,
                   "type": {
@@ -10147,69 +10132,6 @@
                       "ofType": {
                         "kind": "SCALAR",
                         "name": "String",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "availableTargets",
-                  "description": null,
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "SCALAR",
-                        "name": "String",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "Account",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_updateSuperRoles",
-              "description": "Update super roles, scope: super",
-              "args": [
-                {
-                  "name": "accountId",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "roles",
-                  "description": null,
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "SuperRole",
                         "ofType": null
                       }
                     }
@@ -10315,36 +10237,71 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "roles",
+                  "name": "managedTargets",
                   "description": null,
                   "type": {
-                    "kind": "LIST",
+                    "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "NON_NULL",
+                      "kind": "LIST",
                       "name": null,
                       "ofType": {
-                        "kind": "ENUM",
-                        "name": "SuperRole",
-                        "ofType": null
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "TargetRoleConfigInput",
+                          "ofType": null
+                        }
                       }
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Account",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "_updateSuperAccountManagedTargets",
+              "description": "Update super target roles  , scope: super",
+              "args": [
+                {
+                  "name": "accountId",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
                     }
                   },
                   "defaultValue": null
                 },
                 {
-                  "name": "availableTargets",
+                  "name": "managedTargets",
                   "description": null,
                   "type": {
-                    "kind": "LIST",
+                    "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "NON_NULL",
+                      "kind": "LIST",
                       "name": null,
                       "ofType": {
-                        "kind": "SCALAR",
-                        "name": "String",
-                        "ofType": null
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "TargetRoleConfigInput",
+                          "ofType": null
+                        }
                       }
                     }
                   },
@@ -10582,9 +10539,17 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "SCALAR",
+                          "name": "String",
+                          "ofType": null
+                        }
+                      }
                     }
                   },
                   "defaultValue": null
@@ -10593,6 +10558,33 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "SimpleResponse",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "_logout",
+              "description": "Logout, scope: super",
+              "args": [
+                {
+                  "name": "token",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "SimpleSession",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -10874,26 +10866,6 @@
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "AccountSettingsInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "targetId",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "targetKey",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -11186,26 +11158,6 @@
                     "ofType": null
                   },
                   "defaultValue": null
-                },
-                {
-                  "name": "targetId",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "targetKey",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
                 }
               ],
               "type": {
@@ -11464,18 +11416,6 @@
                   "defaultValue": null
                 }
               ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "SimpleResponse",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "registerTargets",
-              "description": "Register targets, scope: authenticated",
-              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "SimpleResponse",
@@ -12534,6 +12474,47 @@
               "deprecationReason": null
             },
             {
+              "name": "_importMetas",
+              "description": "Import metas, scope: super",
+              "args": [
+                {
+                  "name": "data",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "JSON",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "targetId",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "SimpleResponse",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "_createMeta",
               "description": "Create meta, scope: super",
               "args": [
@@ -12698,7 +12679,7 @@
             },
             {
               "name": "createMeta",
-              "description": "Create meta, scope: public",
+              "description": "Create meta, scope: authenticated",
               "args": [
                 {
                   "name": "data",
@@ -14092,77 +14073,6 @@
             {
               "name": "recentlyViewedContents",
               "description": "List recently viewed contents scope: authenticated",
-              "args": [
-                {
-                  "name": "_id",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "limit",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "skip",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "sort",
-                  "description": null,
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "INPUT_OBJECT",
-                        "name": "ContentListSortInput",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "filters",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ContentListFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "ContentList",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "interestedContents",
-              "description": "List interested contents scope: authenticated",
               "args": [
                 {
                   "name": "_id",
@@ -16631,7 +16541,7 @@
         },
         {
           "kind": "ENUM",
-          "name": "SuperRole",
+          "name": "AuthRole",
           "description": null,
           "fields": null,
           "inputFields": null,
@@ -16705,24 +16615,6 @@
             },
             {
               "name": "CONTENTMANAGER",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "TARGETOBSERVER",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "TARGETMANAGER",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "TARGETOWNER",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -17345,6 +17237,34 @@
               "deprecationReason": null
             },
             {
+              "name": "primaryTarget",
+              "description": "API Key's primary target",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Target",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "managedTargets",
+              "description": "API Key's read only targets",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Target",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "endpoints",
               "description": "API Key's endpoints",
               "args": [],
@@ -17503,7 +17423,35 @@
           "inputFields": [
             {
               "name": "targets",
-              "description": "API Key's targets",
+              "description": "API Key's read only targets",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "primaryTarget",
+              "description": "API Key's primary target",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "managedTargets",
+              "description": "API Key's managed targets",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -17567,6 +17515,151 @@
             }
           ],
           "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "TargetRoleConfigInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "targetId",
+              "description": "Target's id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "roles",
+              "description": "Target's roles",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "AuthRole",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "TargetRoleConfig",
+          "description": null,
+          "fields": [
+            {
+              "name": "target",
+              "description": "Target's id",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Target",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "roles",
+              "description": "Target's roles",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "AuthRole",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "createdAt",
+              "description": "Target's created at",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "TargetActivity",
+          "description": null,
+          "fields": [
+            {
+              "name": "target",
+              "description": "Target's id",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Target",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "firstSeenAt",
+              "description": "Target's first seen at",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "lastSeenAt",
+              "description": "Target's last seen at",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -17736,28 +17829,8 @@
               "deprecationReason": null
             },
             {
-              "name": "super",
-              "description": "Account's Super roles, scope: super",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "SuperRole",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "targets",
-              "description": "Account's targets",
+              "name": "targetActivities",
+              "description": "Account's target access",
               "args": [],
               "type": {
                 "kind": "LIST",
@@ -17767,7 +17840,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "Target",
+                    "name": "TargetActivity",
                     "ofType": null
                   }
                 }
@@ -17796,7 +17869,19 @@
               "deprecationReason": null
             },
             {
-              "name": "availableTargets",
+              "name": "lastKnownLocation",
+              "description": "Account's last known location",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "GeoLocation",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "managedTargets",
               "description": "Account's Super targets",
               "args": [],
               "type": {
@@ -17806,23 +17891,11 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
+                    "kind": "OBJECT",
+                    "name": "TargetRoleConfig",
                     "ofType": null
                   }
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "lastKnownLocation",
-              "description": "Account's last known location",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "GeoLocation",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -18187,6 +18260,46 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "targets",
+              "description": "Filter by targets",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ListFilterItem",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "managedTargets",
+              "description": "Filter by managed targets",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ListFilterItem",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -18315,6 +18428,42 @@
                   "ofType": {
                     "kind": "ENUM",
                     "name": "AccountType",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "targets",
+              "description": "Filter by targets",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ListFilterItemInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "managedTargets",
+              "description": "Filter by managed targets",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ListFilterItemInput",
                     "ofType": null
                   }
                 }
@@ -18996,21 +19145,13 @@
               "deprecationReason": null
             },
             {
-              "name": "targets",
-              "description": "Collection's targets",
+              "name": "target",
+              "description": "Collection's target",
               "args": [],
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Target",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "Target",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -19288,20 +19429,12 @@
               "defaultValue": null
             },
             {
-              "name": "targets",
-              "description": "Collection's targets",
+              "name": "targetId",
+              "description": "Collection's target id",
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
               },
               "defaultValue": null
             },
@@ -20131,182 +20264,6 @@
         },
         {
           "kind": "OBJECT",
-          "name": "ContentField",
-          "description": null,
-          "fields": [
-            {
-              "name": "_id",
-              "description": "Field id",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "label",
-              "description": "Field's label",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "MLString",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "key",
-              "description": "Field's key",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "defaultValue",
-              "description": "Field's value",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "JSON",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "type",
-              "description": "Field's type",
-              "args": [],
-              "type": {
-                "kind": "ENUM",
-                "name": "ContentFieldType",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "min",
-              "description": "Field's min length",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "max",
-              "description": "Field's max length",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ContentFieldInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "_id",
-              "description": "Field id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "label",
-              "description": "Field's label",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "MLStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "key",
-              "description": "Field's key",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "defaultValue",
-              "description": "Field's value",
-              "type": {
-                "kind": "SCALAR",
-                "name": "JSON",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "type",
-              "description": "Field's type",
-              "type": {
-                "kind": "ENUM",
-                "name": "ContentFieldType",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "min",
-              "description": "Field's min length",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "max",
-              "description": "Field's max length",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
           "name": "ContentAsset",
           "description": null,
           "fields": [
@@ -20543,532 +20500,6 @@
         },
         {
           "kind": "OBJECT",
-          "name": "ContentSourceQuery",
-          "description": null,
-          "fields": [
-            {
-              "name": "filters",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "ContentSourceFilter",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "sort",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ContentListSort",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ContentSourceQueryInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "filters",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ContentSourceFilterInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "sort",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ContentListSortInput",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "ContentSourceFilter",
-          "description": null,
-          "fields": [
-            {
-              "name": "keyword",
-              "description": "Filter by keyword",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "promptId",
-              "description": "Filter by promptId",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "targets",
-              "description": "Filter by targets",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ListFilterItem",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "tags",
-              "description": "Filter by tags",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ListFilterItem",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "interested",
-              "description": "Filter by interested",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "recently",
-              "description": "Filter by recently",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "liked",
-              "description": "Filter by liked",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "random",
-              "description": "Filter by random",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ContentSourceFilterInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "keyword",
-              "description": "Filter by keyword",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "promptId",
-              "description": "Filter by promptId",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "targets",
-              "description": "Filter by targets",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ListFilterItemInput",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "tags",
-              "description": "Filter by tags",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ListFilterItemInput",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "interested",
-              "description": "Filter by interested",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "recently",
-              "description": "Filter by recently",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "liked",
-              "description": "Filter by liked",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "random",
-              "description": "Filter by random",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "ContentSource",
-          "description": null,
-          "fields": [
-            {
-              "name": "_id",
-              "description": "Source's id",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "title",
-              "description": "Source's title",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "MLString",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "description",
-              "description": "Source's description",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "MLString",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "key",
-              "description": "Source's key",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "picture",
-              "description": "Source's picture",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "MLFile",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "color",
-              "description": "Source's color",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "contents",
-              "description": "Source's contents",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Content",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "query",
-              "description": "Source's query",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "ContentSourceQuery",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ContentSourceInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "_id",
-              "description": "Source's id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "title",
-              "description": "Source's title",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "MLStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "description",
-              "description": "Source's description",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "MLStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "key",
-              "description": "Source's key",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "picture",
-              "description": "Source's picture",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "MLFileInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "color",
-              "description": "Source's color",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "contents",
-              "description": "Source's content",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "query",
-              "description": "Source's query",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ContentSourceQueryInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
           "name": "ContentVariant",
           "description": null,
           "fields": [
@@ -21207,46 +20638,6 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
-            },
-            {
-              "name": "sources",
-              "description": "Content's available sources, e.g. different audio or type+tag combinations",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ContentSource",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "fields",
-              "description": "Content's fields",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ContentField",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -21363,42 +20754,6 @@
                 "kind": "SCALAR",
                 "name": "JSON",
                 "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "sources",
-              "description": "Available Sources",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ContentSourceInput",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "fields",
-              "description": "Content's fields",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ContentFieldInput",
-                    "ofType": null
-                  }
-                }
               },
               "defaultValue": null
             }
@@ -21941,18 +21296,6 @@
               "deprecationReason": null
             },
             {
-              "name": "status",
-              "description": "Content's status",
-              "args": [],
-              "type": {
-                "kind": "ENUM",
-                "name": "ContentStatus",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "title",
               "description": "Content's title",
               "args": [],
@@ -22001,6 +21344,82 @@
               "deprecationReason": null
             },
             {
+              "name": "location",
+              "description": "Content's location",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "GeoLocation",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": "Content's status",
+              "args": [],
+              "type": {
+                "kind": "ENUM",
+                "name": "ContentStatus",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "input",
+              "description": "Content's input",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "File",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "credits",
+              "description": "Content's credits",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ContentCredit",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "resources",
+              "description": "Content's resources",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "KeyValue",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "assets",
               "description": "Content's assets",
               "args": [],
@@ -22013,6 +21432,26 @@
                   "ofType": {
                     "kind": "OBJECT",
                     "name": "ContentAsset",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "variants",
+              "description": "Content's variants",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ContentVariant",
                     "ofType": null
                   }
                 }
@@ -22053,96 +21492,12 @@
               "deprecationReason": null
             },
             {
-              "name": "sources",
-              "description": "Content's available sources, e.g. different audio or type+tag combinations",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ContentSource",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "variants",
-              "description": "Content's variants",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ContentVariant",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "fields",
-              "description": "Content's fields",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ContentField",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "prompt",
               "description": "Content's prompt",
               "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Prompt",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "callbackUrl",
-              "description": "Content's callback url",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "callbackTriggerAttempts",
-              "description": "Content's callback trigger attempts",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -22173,21 +21528,49 @@
               "deprecationReason": null
             },
             {
-              "name": "targets",
+              "name": "promptGeneratedParams",
+              "description": "Content's prompt generated params",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "JSON",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "callbackUrl",
+              "description": "Content's callback url",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "callbackTriggerAttempts",
+              "description": "Content's callback trigger attempts",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "target",
               "description": "Content's target",
               "args": [],
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Target",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "Target",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -22233,36 +21616,12 @@
               "deprecationReason": null
             },
             {
-              "name": "disabled",
-              "description": "Is content disabled?",
+              "name": "published",
+              "description": "Is content published?",
               "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "disableReason",
-              "description": "Content's disabled reason",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "disabledAt",
-              "description": "Content's disabled at",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Date",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -22293,12 +21652,36 @@
               "deprecationReason": null
             },
             {
-              "name": "published",
-              "description": "Is content published?",
+              "name": "disabled",
+              "description": "Is content disabled?",
               "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "disableReason",
+              "description": "Content's disabled reason",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "disabledAt",
+              "description": "Content's disabled at",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -22359,82 +21742,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "credits",
-              "description": "Content's credits",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ContentCredit",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "resources",
-              "description": "Content's resources",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "KeyValue",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "liked",
-              "description": "Content's current user liked",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "location",
-              "description": "Content's location",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "GeoLocation",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "input",
-              "description": "Content's input",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "File",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -22937,6 +22244,16 @@
               "defaultValue": null
             },
             {
+              "name": "locale",
+              "description": "Content's locale",
+              "type": {
+                "kind": "ENUM",
+                "name": "Locale",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "variants",
               "description": "Content's variants",
               "type": {
@@ -22948,24 +22265,6 @@
                   "ofType": {
                     "kind": "INPUT_OBJECT",
                     "name": "ContentVariantInput",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "fields",
-              "description": "Content's fields",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ContentFieldInput",
                     "ofType": null
                   }
                 }
@@ -23001,16 +22300,6 @@
               "defaultValue": null
             },
             {
-              "name": "locale",
-              "description": "Content's locale",
-              "type": {
-                "kind": "ENUM",
-                "name": "Locale",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "assets",
               "description": "Content's assets",
               "type": {
@@ -23029,24 +22318,6 @@
               "defaultValue": null
             },
             {
-              "name": "sources",
-              "description": "Content's available sources, e.g. different audio or type+tag combinations",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ContentSourceInput",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
               "name": "prompt",
               "description": "Content's prompt",
               "type": {
@@ -23057,20 +22328,12 @@
               "defaultValue": null
             },
             {
-              "name": "targets",
+              "name": "targetId",
               "description": "Content's target",
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
               },
               "defaultValue": null
             },
@@ -23104,7 +22367,7 @@
             },
             {
               "name": "publishedUntil",
-              "description": "Content's endDate",
+              "description": "Content's published until",
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -23170,7 +22433,7 @@
             },
             {
               "name": "tags",
-              "description": "Conent's tags",
+              "description": "Content's tags",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -23369,44 +22632,32 @@
               "deprecationReason": null
             },
             {
-              "name": "interested",
-              "description": "Filter by interested",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "recently",
-              "description": "Filter by recently",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "liked",
-              "description": "Filter by liked",
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "random",
               "description": "Filter by random",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "personalized",
+              "description": "Filter by personalized",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "includeExpired",
+              "description": "Filter by includeExpired",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -23628,6 +22879,16 @@
             {
               "name": "random",
               "description": "Filter by random",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "personalized",
+              "description": "Filter by personalized",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -24045,6 +23306,26 @@
               "deprecationReason": null
             },
             {
+              "name": "targets",
+              "description": "Device's targets",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Target",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "disableReason",
               "description": "Device's disabled reason",
               "args": [],
@@ -24247,6 +23528,26 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "targets",
+              "description": "Filter by targets",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ListFilterItem",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -24380,6 +23681,24 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "targets",
+              "description": "Filter by targets",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ListFilterItemInput",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             }
@@ -25939,6 +25258,143 @@
         },
         {
           "kind": "ENUM",
+          "name": "NearbyTerrain",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "MOUNTAIN",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "BEACH",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "LAKE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "OCEAN",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "DESERT",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "FOREST",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "VOLCANO",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "CITY",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "RURAL",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "PARK",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "CULTURAL",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "DINING",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SHOPPING",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "LANDMARK",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ENTERTAINMENT",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SCENIC",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "TRAIL",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "RESORT",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ANCIENT",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SPACE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "OTHER",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
           "name": "WeatherConditionCode",
           "description": null,
           "fields": null,
@@ -26485,6 +25941,26 @@
               "deprecationReason": null
             },
             {
+              "name": "nearbyTerrains",
+              "description": "Location's nearby terrains",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "NearbyTerrain",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "createdBy",
               "description": "Location's createdBy",
               "args": [],
@@ -26587,6 +26063,18 @@
               "type": {
                 "kind": "ENUM",
                 "name": "Country",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "target",
+              "description": "Location's target",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Target",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -26743,6 +26231,26 @@
               "deprecationReason": null
             },
             {
+              "name": "targets",
+              "description": "Filter by targets",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ListFilterItem",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "custom",
               "description": "Custom filter key",
               "args": [],
@@ -26886,6 +26394,24 @@
                 "kind": "SCALAR",
                 "name": "ID",
                 "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "targets",
+              "description": "Filter by targets",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ListFilterItemInput",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
@@ -30023,21 +29549,13 @@
               "deprecationReason": null
             },
             {
-              "name": "targets",
-              "description": "Media targets",
+              "name": "target",
+              "description": "Media target",
               "args": [],
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Target",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "Target",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -30275,20 +29793,12 @@
               "defaultValue": null
             },
             {
-              "name": "targets",
-              "description": "Media targets",
+              "name": "targetId",
+              "description": "Media target id",
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
               },
               "defaultValue": null
             },
@@ -31239,26 +30749,6 @@
               "deprecationReason": null
             },
             {
-              "name": "targets",
-              "description": "Meta's targets",
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Target",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "resources",
               "description": "Meta's resources",
               "args": [],
@@ -31389,6 +30879,18 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "target",
+              "description": "Meta's target",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Target",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -31491,24 +30993,6 @@
               "defaultValue": null
             },
             {
-              "name": "targets",
-              "description": "Meta's targets",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
               "name": "published",
               "description": "Is meta published?",
               "type": {
@@ -31551,6 +31035,16 @@
                     "ofType": null
                   }
                 }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "targetId",
+              "description": "Meta's target id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
               },
               "defaultValue": null
             }
@@ -32312,21 +31806,13 @@
               "deprecationReason": null
             },
             {
-              "name": "targets",
-              "description": "Prompt's targets",
+              "name": "target",
+              "description": "Prompt's target",
               "args": [],
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Target",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "Target",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -32804,20 +32290,12 @@
               "defaultValue": null
             },
             {
-              "name": "targets",
-              "description": "Prompt's targets",
+              "name": "targetId",
+              "description": "Prompt's target id",
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
               },
               "defaultValue": null
             },
@@ -35318,6 +34796,50 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "embeddingPrompt",
+              "description": "Target's embedding prompt",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "filteringPrompt",
+              "description": "Target's filtering prompt",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "filteringParameters",
+              "description": "Target's filtering parameters",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -35353,6 +34875,44 @@
                   "ofType": {
                     "kind": "INPUT_OBJECT",
                     "name": "TargetClientInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "embeddingPrompt",
+              "description": "Target's embedding prompt",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "filteringPrompt",
+              "description": "Target's filtering prompt",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "filteringParameters",
+              "description": "Target's filtering parameters",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
                     "ofType": null
                   }
                 }
@@ -37765,6 +37325,12 @@
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "PARAMETER",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null
@@ -37775,8 +37341,20 @@
           "description": null,
           "fields": [
             {
+              "name": "key",
+              "description": "Filter item key, used in filtering prompt placeholder if target has filtering prompt otherwise ignored. example: MY_TARGET:MY_KEY",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "value",
-              "description": null,
+              "description": "Filter item values",
               "args": [],
               "type": {
                 "kind": "LIST",
@@ -37796,23 +37374,11 @@
             },
             {
               "name": "operator",
-              "description": null,
+              "description": "Filter item operator, if operator is PARAMETER, will be used in filtering prompt placeholder if target has filtering prompt",
               "args": [],
               "type": {
                 "kind": "ENUM",
                 "name": "ListFilterOperator",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "key",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -38181,6 +37747,18 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "__Type",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isOneOf",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -38893,6 +38471,12 @@
               "defaultValue": null
             }
           ]
+        },
+        {
+          "name": "oneOf",
+          "description": "Indicates exactly one field must be supplied and this field must not be `null`.",
+          "locations": ["INPUT_OBJECT"],
+          "args": []
         }
       ]
     }

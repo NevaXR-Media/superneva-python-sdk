@@ -173,7 +173,7 @@ class SNAuth(SNRequest):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-    def registerTargets(self, _auth: Optional[Auth] = None) -> SimpleResponse:
+    def registerTargets(self, _auth: Optional[Auth] = None) -> Any:
         return self.request("/auth/register-targets", body={}, auth=_auth)
 
     def isServiceConnected(self, _auth: Optional[Auth] = None) -> Any:
@@ -182,11 +182,11 @@ class SNAuth(SNRequest):
     def loginWithToken(self, token: "str", _auth: Optional[Auth] = None) -> Session:
         return self.request("/auth/login-with-token", body=cleanup_null_dict_values({ "token": token }), auth=_auth)
 
-    def connectWithService(self, service: "ServiceInput", data: Optional["Any"]=None, targetId: Optional["str"]=None, targetKey: Optional["str"]=None, _auth: Optional[Auth] = None) -> Session:
-        return self.request("/auth/connect-with-service", body=cleanup_null_dict_values({ "service": service, "data": data, "targetId": targetId, "targetKey": targetKey }), auth=_auth)
+    def connectWithService(self, service: "ServiceInput", data: Optional["Any"]=None, _auth: Optional[Auth] = None) -> Session:
+        return self.request("/auth/connect-with-service", body=cleanup_null_dict_values({ "service": service, "data": data }), auth=_auth)
 
-    def createAccount(self, email: "str", password: "str", profile: Optional["AccountProfileInput"]=None, settings: Optional["AccountSettingsInput"]=None, targetId: Optional["str"]=None, targetKey: Optional["str"]=None, _auth: Optional[Auth] = None) -> Session:
-        return self.request("/auth/create-account", body=cleanup_null_dict_values({ "email": email, "password": password, "profile": profile, "settings": settings, "targetId": targetId, "targetKey": targetKey }), auth=_auth)
+    def createAccount(self, email: "str", password: "str", profile: Optional["AccountProfileInput"]=None, settings: Optional["AccountSettingsInput"]=None, _auth: Optional[Auth] = None) -> Session:
+        return self.request("/auth/create-account", body=cleanup_null_dict_values({ "email": email, "password": password, "profile": profile, "settings": settings }), auth=_auth)
 
 
 class SNAccounts(SNRequest):

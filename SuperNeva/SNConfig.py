@@ -5,5 +5,6 @@ from SuperNeva.SNSQS import SNSQSConfig
 
 class SNConfig(TypedDict):
     base_url: str
-    public: str
+    public: Optional[str]
+    secret: Optional[str]
     sqs_config: Optional[SNSQSConfig]

@@ -24,6 +24,7 @@ class SuperNeva:
 
         self.base_url = config["base_url"]
         self.public = config["public"]
+        self.secret = config["secret"]
 
         self.isSuperNevaReady = config["base_url"] != ""
         self.isResponseQueueReady = config["sqs_config"] is not None

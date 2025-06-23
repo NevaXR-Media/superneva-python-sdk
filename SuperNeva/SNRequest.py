@@ -10,6 +10,7 @@ class Auth(TypedDict, total=False):
     account_id: Optional[str]
     token: Optional[str]
     provider: Optional[str]
+    method: Optional[str]
 
 
 class SNRequest:
@@ -18,6 +19,7 @@ class SNRequest:
         self.logger = SNLogger(name="SNRequest", colorize=False)
         self.base_url = config["base_url"]
         self.public = config["public"]
+        self.secret = config["secret"]
 
     def request(
         self,
@@ -26,25 +28,33 @@ class SNRequest:
         auth: Optional[Auth] = None,
     ) -> Any:
         print("NEW REQUEST", self.base_url + path, auth)
-        if auth is None:
-            headers = {
-                "content-type": "application/json",
-                "x-public-key": self.public,
-            }
-        else:
-            headers = {
-                "content-type": "application/json",
-                "x-public-key": self.public,
-            }
 
-            if auth.get("token"):
-                headers["x-impersonate"] = (
-                    f"{auth.get('provider','neva')}:::{auth.get('account_id')}:::{auth.get('token')}"
-                )
-            else:
-                headers["x-impersonate"] = (
-                    f"{auth.get('provider','neva')}:::{auth.get('account_id')}"
-                )
+        headers = {
+            "content-type": "application/json",
+        }
+
+        if auth:
+            method = auth.get("method")
+
+            if method == "secret" and self.secret:
+                headers = {
+                    "x-secret-key": self.secret,
+                }
+
+            elif self.public:
+                headers = {
+                    "x-public-key": self.public,
+                }
+
+            provider = auth.get("provider", "neva")
+            account_id = auth.get("account_id")
+            token = auth.get("token")
+
+            if account_id:
+                if token:
+                    headers["x-impersonate"] = f"{provider}:::{account_id}:::{token}"
+                else:
+                    headers["x-impersonate"] = f"{provider}:::{account_id}"
 
         try:
             response = requests.post(self.base_url + path, headers=headers, json=body)
